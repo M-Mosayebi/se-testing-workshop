@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Swag Labs</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f4; display: flex; justify-content: center; padding-top: 60px; }
+    .box { background: white; padding: 30px; width: 300px; border-radius: 6px; }
+    input { width: 100%; padding: 8px; margin: 6px 0; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #3ddc91; border: 0; cursor: pointer; }
+    .error { background: #e2231a; color: white; padding: 8px; margin-top: 10px; display: none; }
+    .title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="box" id="login-view">
+    <h2>Swag Labs</h2>
+    <input id="user-name" placeholder="Username" data-test="username">
+    <input id="password" type="password" placeholder="Password" data-test="password">
+    <button id="login-button">Login</button>
+    <div class="error" data-test="error"></div>
+  </div>
+
+  <div class="box" id="products-view" style="display:none">
+    <div class="title">Products</div>
+    <div class="inventory_item">Sauce Labs Backpack</div>
+    <div class="inventory_item">Sauce Labs Bike Light</div>
+  </div>
+
+  <script>
+    const VALID_USERS = ["standard_user", "problem_user"];
+    const PASSWORD = "secret_sauce";
+
+    function showError(msg) {
+      const e = document.querySelector("[data-test='error']");
+      e.textContent = "Epic sadface: " + msg;
+      e.style.display = "block";
+    }
+
+    document.getElementById("login-button").addEventListener("click", () => {
+      const user = document.getElementById("user-name").value;
+      const pass = document.getElementById("password").value;
+
+      if (user === "") return showError("Username is required");
+      if (pass === "") return showError("Password is required");
+      if (user === "locked_out_user" && pass === PASSWORD)
+        return showError("Sorry, this user has been locked out.");
+      if (VALID_USERS.includes(user) && pass === PASSWORD) {
+        document.getElementById("login-view").style.display = "none";
+        document.getElementById("products-view").style.display = "block";
+        history.pushState({}, "", "#/inventory");
+        return;
+      }
+      showError("Username and password do not match any user in this service");
+    });
+  </script>
+</body>
+</html>
