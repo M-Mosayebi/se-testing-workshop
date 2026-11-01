@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.2.0, pluggy-1.7.0 -- /home/msy/se-testing-workshop/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/msy/se-testing-workshop
+plugins: playwright-0.10.0
+collecting ... collected 8 items
+
+tests/test_login_pom.py::test_successful_login[chromium] PASSED          [ 12%]
+tests/test_login_pom.py::test_empty_username[chromium] PASSED            [ 25%]
+tests/test_login_pom.py::test_empty_password[chromium] FAILED            [ 37%]
+tests/test_login_pom.py::test_locked_out_user[chromium] FAILED           [ 50%]
+tests/test_login_pom.py::test_invalid_credentials[chromium-standard_user-wrong_pass] PASSED [ 62%]
+tests/test_login_pom.py::test_invalid_credentials[chromium-STANDARD_USER-secret_sauce] PASSED [ 75%]
+tests/test_login_pom.py::test_invalid_credentials[chromium-standard_user-SECRET_SAUCE] PASSED [ 87%]
+tests/test_login_pom.py::test_invalid_credentials[chromium-unknown_user-secret_sauce] PASSED [100%]
+
+=================================== FAILURES ===================================
+________________________ test_empty_password[chromium] _________________________
+
+login_page = <pages.login_page.LoginPage object at 0x7abde603dd80>
+
+    def test_empty_password(login_page: LoginPage):
+        login_page.login("standard_user", "")
+>       expect(login_page.error_message).to_contain_text("Password is required")
+E       AssertionError: Locator expected to contain text 'Password is required'
+E       Actual value: Epic sadface: Password required 
+E       Call log:
+E         - Expect "to_contain_text" locator("[data-test='error']") with timeout 5000ms
+E         - waiting for locator("[data-test='error']")
+E           14 × locator resolved to <div class="error" data-test="error">Epic sadface: Password required</div>
+E              - unexpected value "Epic sadface: Password required"
+E       
+E       Aria snapshot:
+E       - text: "Epic sadface: Password required"
+
+tests/test_login_pom.py:29: AssertionError
+________________________ test_locked_out_user[chromium] ________________________
+
+login_page = <pages.login_page.LoginPage object at 0x7abde607ffd0>
+
+    def test_locked_out_user(login_page: LoginPage):
+        login_page.login("locked_out_user", "secret_sauce")
+>       expect(login_page.error_message).to_contain_text("locked out")
+E       AssertionError: Locator expected to contain text 'locked out'
+E       Actual value: Epic sadface: Username and password do not match any user in this service 
+E       Call log:
+E         - Expect "to_contain_text" locator("[data-test='error']") with timeout 5000ms
+E         - waiting for locator("[data-test='error']")
+E           14 × locator resolved to <div class="error" data-test="error">Epic sadface: Username and password do not match …</div>
+E              - unexpected value "Epic sadface: Username and password do not match any user in this service"
+E       
+E       Aria snapshot:
+E       - text: "Epic sadface: Username and password do not match any user in this service"
+
+tests/test_login_pom.py:35: AssertionError
+=============================== warnings summary ===============================
+tests/test_login_pom.py::test_successful_login[chromium]
+  /home/msy/se-testing-workshop/venv/lib/python3.10/site-packages/_pytest/fixtures.py:1392: PytestRemovedIn10Warning: Session-scoped fixtures defined as instance methods are deprecated.
+  Instance attributes set in the 'base_url' fixture will NOT be visible to test methods,
+  as each test gets a new instance while the fixture runs only once per class.
+  Use a @classmethod decorator below @pytest.fixture and set attributes on cls instead.
+  See https://docs.pytest.org/en/stable/deprecations.html#class-scoped-fixture-as-instance-method
+    fixturefunc = resolve_fixture_function(fixturedef, request)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_login_pom.py::test_empty_password[chromium] - AssertionErro...
+FAILED tests/test_login_pom.py::test_locked_out_user[chromium] - AssertionErr...
+=================== 2 failed, 6 passed, 1 warning in 12.90s ====================

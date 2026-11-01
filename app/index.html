@@ -42,9 +42,7 @@
       const pass = document.getElementById("password").value;
 
       if (user === "") return showError("Username is required");
-      if (pass === "") return showError("Password is required");
-      if (user === "locked_out_user" && pass === PASSWORD)
-        return showError("Sorry, this user has been locked out.");
+      if (pass === "") return showError("Password required");
       if (VALID_USERS.includes(user) && pass === PASSWORD) {
         document.getElementById("login-view").style.display = "none";
         document.getElementById("products-view").style.display = "block";
